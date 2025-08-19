@@ -1,0 +1,74 @@
+body {
+    display: flex;
+}
+
+.left, .right {
+    width: 50%;
+    height: 100vh;
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    width: 70%;
+    .password-field {
+        position: relative;
+        i {
+            position: absolute;
+            top: 65%;
+            right: 20px;
+            font-size: .8rem;
+            cursor: pointer;
+        }
+    }
+
+    .bottom {
+        margin-top: 50px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        a {
+            text-decoration: none;
+            transition: all .2s ease-in-out;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.degrade {
+    background: linear-gradient(135deg, #ffffff, #dbeafe, #38bdf8, #0ea5e9);
+    gap: 50px;
+    .all {
+        display: flex;
+        align-items: center;
+        width: 80%;
+        .icon {
+            position: relative;
+            width: 13%;
+            height: 100%;
+            background-color: #212529;
+            margin-right: 20px;
+            border-radius: 10px;
+            i {
+                color: white;
+                position: absolute;
+                font-size: 3rem;
+                top: 25%;
+                left: 20%;
+            }
+        }
+        .paragraphe {
+            border-left: 1px solid #212529;
+            padding-left: 10px;
+            max-width: 600px;
+        }
+    }
+}
+
