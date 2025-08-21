@@ -11,21 +11,31 @@
             <div class="mb-3">
                 <label class='form-label' for="username">Votre nom</label>
                 <input class='form-control' type="text" name="username" id="username" required placeholder="Ex: John Doe">
+                <?php if (!empty($_SESSION['errors']['username'])): ?>
+                    <div class="text-danger mt-1"><?= $_SESSION['errors']['username'] ?></div>
+                <?php endif; ?>
             </div>
             <div class="mb-3">
                 <label class='form-label' for="email">Votre Email</label>
                 <input class='form-control' type="email" name="email" id="email" required placeholder="Ex: JohnDoe@gmail.com">
+                <?php if (!empty($_SESSION['errors']['email'])): ?>
+                    <div class="text-danger mt-1"><?= $_SESSION['errors']['email'] ?></div>
+                <?php endif; ?>
             </div>
             <div class="mb-3 password-field">
                 <label class='form-label' for="password">Mot de passe</label>
                 <input class='form-control' type="password" name="password" id="password" required>
                 <i class='fas fa-eye' id='togglePassword'></i>
+                <?php if (!empty($_SESSION['errors']['password'])): ?>
+                    <div class="text-danger mt-1"><?= $_SESSION['errors']['password'] ?></div>
+                <?php endif; ?>
             </div>
             <div class="bottom">
                 <button type="submit" class='btn btn-primary'>S'inscrire <i class="fa fa-user-plus"></i></button>
                 <a href="/login">Vous avez déjà une compte ?</a>
             </div>
         </form>
+        <?php unset($_SESSION['errors']); ?>
     </div>
 @endsection('left')
 

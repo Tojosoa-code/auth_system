@@ -1,4 +1,3 @@
-
 @extends('Layout/form')
 
 @section('title')
@@ -8,14 +7,20 @@
 @section('right')
     <div class="right">
         <h1 class='text-center my-5'>Se connecter</h1>
-        <form action="/login" method="POST">
+        <form action="/login" method="post">
             <div class="mb-3">
-                <label class="form-label" for="email">Votre Email</label>
+                <label for="email">Email</label>
                 <input class="form-control" type="email" name="email" id="email" required placeholder="Ex: JohnDoe@gmail.com">
+                <?php if (!empty($_SESSION['errors']['email'])): ?>
+                    <div class="text-danger mt-1"><?= $_SESSION['errors']['email'] ?></div>
+                <?php endif; ?>
             </div>
             <div class="mb-3 password-field">
-                <label class="form-label" for="password">Mot de passe</label>
+                <label for="password">Mot de passe</label>
                 <input class="form-control" type="password" name="password" id="password" required>
+                <?php if (!empty($_SESSION['errors']['password'])): ?>
+                    <div class="text-danger mt-1"><?= $_SESSION['errors']['password'] ?></div>
+                <?php endif; ?>
                 <i class="fas fa-eye" id="togglePassword"></i>
             </div>
             <div class="bottom">
@@ -23,6 +28,7 @@
                 <a href="/register">Vous n'avez pas de compte ?</a>
             </div>
         </form>
+        <?php unset($_SESSION['errors']); ?>
     </div>
 @endsection('right')
 
