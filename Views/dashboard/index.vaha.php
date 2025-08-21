@@ -20,43 +20,12 @@
         .bottom {
             margin-top: 50px;
         }
-
+    }
 @endsection
 
 @section('content')
 <?php
     extract($_SESSION['user']);
-    $error = false;
-    $error2 = false;
-    $success = false;
-
-    if($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $ancien = $_POST['ancienPassword'];
-        $new = $_POST['newPassword'];
-
-        $bdd = Database::getConnexion();
-        $stmt = $bdd->prepare("SELECT * FROM users WHERE id = ? LIMIT 1");
-        $stmt->execute([$id]);
-        $mdp = $stmt->fetch();
-
-        if(!password_verify($ancien, $mdp['password'])) {
-            $error = true;
-            header("Location: /d");
-            exit;
-        }
-
-        if(strlen($new) < 6) {
-            $error2 = true;
-            header('Location: /d');
-            exit;
-        }
-
-        $st = $bdd->prepare('UPDATE users SET password = ? WHERE id = ?');
-        $s->execute([$new, $id]);
-        $success = true;
-        header("Location: /d");
-        exit;
-    }
 ?>
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Eleventh navbar example">
@@ -79,21 +48,6 @@
     </header>  
 
     <div class="content mt-5">
-
-    @if($error) 
-        <div>error</div>
-    @else
-
-    @endif
-
-    @if($error2) 
-        <div>error2</div>
-    @endif
-
-    @if($success) 
-        <div>success</div>
-    @endif
-
         <div class="col-md-15">
             <div class="h-100 p-5 bg-body-tertiary border rounded-3">
                 <h2><i class='fas fa-user'></i>Utilisateur</h2>
@@ -103,17 +57,38 @@
         <div class="information d-flex mt-3 gap-3 justify-content-between">
             <div class="col-md-15" style="width: 50%;">
                 <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                    <h2><i class='fas fa-info-circle'></i>Information</h2>
-                    <p class="mt-3">Nom : <strong>{{ $username }}</strong></p>
-                    <p>Email : <strong>{{ $email }}</strong></p>
+
+                    <h2><i class='fas fa-info-circle'></i>Information <i class="fas fa-pen edit-info" style="cursor:pointer; font-size: .8rem;margin-left: 10rem;" title="Modifier" data-bs-toggle="modal" data-bs-target="#editInfoModal"></i></h2>
+                    <?php if (isset($_SESSION['info_error'])): ?>
+                        <div class="alert alert-danger"><?= $_SESSION['info_error'] ?></div>
+                        <?php unset($_SESSION['info_error']); ?>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['info_success'])): ?>
+                        <div class="alert alert-success"><?= $_SESSION['info_success'] ?></div>
+                        <?php unset($_SESSION['info_success']); ?>
+                    <?php endif; ?>
+                    <p class="mt-3">
+                        Nom : <strong>{{ $username }}</strong>
+                    </p>
+                    <p>
+                        Email : <strong>{{ $email }}</strong>
+                    </p>
                 </div>
             </div>
             <div class="col-md-15" style="width: 50%;">
                 <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <div class="alert alert-danger"><?= $_SESSION['error'] ?></div>
+                        <?php unset($_SESSION['error']); ?>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['success'])): ?>
+                        <div class="alert alert-success"><?= $_SESSION['success'] ?></div>
+                        <?php unset($_SESSION['success']); ?>
+                    <?php endif; ?>
                     <h2><i class='fas fa-refresh'></i>Reinitialiser mot de passe</h2>
-                    <form method="post">
+                    <form action="/changer_mdp" method="post">
                         <div class="mb-3 password-ancien">
-                            <label class='form-label' for="ancienPassword">Ancien Mot de passe</label>
+                            <label class='form-label' for="ancienPassword">Mot de passe actuelle</label>
                             <input class='form-control' type="password" name="ancienPassword" id="ancienPassword" required>
                             <i class='fas fa-eye' id='togglePasswordAncien'></i>
                         </div>
@@ -122,6 +97,7 @@
                             <input class='form-control' type="password" name="newPassword" id="newPassword" required>
                             <i class='fas fa-eye' id='togglePasswordNew'></i>
                         </div>
+                        <input type="hidden" name="_method" value="PUT">
                         <div class="bottom">
                             <button type="submit" class="btn btn-primary">Changer <i class="fa fa-refresh"></i></button>
                         </div>
@@ -129,6 +105,33 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modal Bootstrap pour modifier nom et email -->
+    <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form class="modal-content" action="/modifier_info" method="post">
+          <input type="hidden" name="_method" value="PUT">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editInfoModalLabel">Modifier mes informations</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="modalUsername" class="form-label">Nom</label>
+              <input type="text" class="form-control" id="modalUsername" name="username" value="<?= htmlspecialchars($username) ?>" required>
+            </div>
+            <div class="mb-3">
+              <label for="modalEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="modalEmail" name="email" value="<?= htmlspecialchars($email) ?>" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+          </div>
+        </form>
+      </div>
     </div>
 @endsection
 

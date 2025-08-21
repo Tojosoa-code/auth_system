@@ -22,6 +22,7 @@
             </div>
         </div>
     </main>
+    <script src="/public/assets/javascript/bootstrap/bootstrap.bundle.min.js"></script>
     @yield('script')
 </body>
 </html>

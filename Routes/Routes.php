@@ -6,6 +6,7 @@
     $router->get('/login', [$auth, 'showLogin']);
     $router->get('/logout', [$auth, 'logout']); 
     $router->post('/login', [$auth, 'login']);
-
+    $router->put('/changer_mdp', [$dash, 'change']);
+    $router->put('/modifier_info', [$dash, 'updateInfo']);
     $router->get('/dashboard', [$dash, 'dashboard']);
 
